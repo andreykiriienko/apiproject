@@ -1,0 +1,5 @@
+DB_USERNAME = 'pbbot_apiproject'
+DB_PASSWORD = 'y#h3Ea56X*'
+DB_NAME = 'pbbot_apiproject'
+DB_HOST = 'pbbot.mysql.tools'
+DB_PORT = ''
