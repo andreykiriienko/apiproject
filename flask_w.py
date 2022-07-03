@@ -1,5 +1,6 @@
+from builder.user_builder import UserBuilder
+from db_request.user import DataUsers
 from flask import Flask, request
-from user import DataUsers
 
 app = Flask(__name__)
 
@@ -7,7 +8,7 @@ app = Flask(__name__)
 @app.route('/user/create', methods=['POST'])
 def create():
     content_type = request.headers.get('Content-Type')
-    if (content_type == 'application/json'):
+    if content_type == 'application/json':
         json = request.json
         by_username = json.get('username')
         return DataUsers().create_user(data=json).get_users_by_username(by_username)
@@ -17,8 +18,17 @@ def create():
 
 @app.route('/user/<int:id>', methods=['GET'])
 def users_get(id):
-    return DataUsers().get_user_by_id(id)
+    return UserBuilder().get_user(user_id=id).to_json()
 
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+# TODO
+# Create User
+# /user
+#  {"username": "boy", "name": "Vlad"}
+#
+# Get User
+# /user/<id>

@@ -1,17 +1,10 @@
-from datetime import datetime
-
 from sqlalchemy import Column, Integer, String, ForeignKey, TIMESTAMP
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship
+from datetime import datetime
+from config import Base, engine
 import pymysql
-import config as c
 
 pymysql.install_as_MySQLdb()
-
-engine = create_engine(f'mysql+pymysql://{c.DB_USERNAME}:{c.DB_PASSWORD}@{c.DB_HOST}/{c.DB_NAME}', encoding='utf8')
-
-Base = declarative_base()
 
 
 class Users(Base):
@@ -38,7 +31,7 @@ class Links(Base):
     __tablename__ = 'Links'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('Users.id'), nullable=False, unique=True)
+    user_id = Column(Integer, ForeignKey('Users.id'), nullable=False)
     link_type_id = Column(Integer, ForeignKey('Types.id'))
     link = Column(String(150), nullable=True)
     user = relationship('Users')
