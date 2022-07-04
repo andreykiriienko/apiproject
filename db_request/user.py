@@ -27,7 +27,7 @@ class DataUsers:
         self.session.add(user)
         self.session.commit()
         self.session.close()
-        return self
+        return ?
 
     def get_user_by_id(self, user_id):
         user = self.session.query(Users).filter(Users.id == user_id).first()
@@ -41,16 +41,17 @@ class DataUsers:
                      'email': user.email, 'role': user.role, 'date_creation': user.date_creation}
         return user_data
 
-    def user_delete(self, id):
+    def user_delete(self, user_id):
         try:
-            user = self.session.query(Users).filter(Users.id == id).first()
+            user = self.session.query(Users).filter(Users.id == user_id).first()
 
             self.session.delete(user)
             self.session.commit()
-            self.session.close()
-            return True
+            return {'success': f'user with id: {user_id} - was deleted'}
         except Exception as error:
+            return {'error': [error]}
+        finally:
             self.session.close()
-            return {'error': error}
+
 
 
