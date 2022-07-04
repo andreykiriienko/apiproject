@@ -11,7 +11,7 @@ def create():
     if content_type == 'application/json':
         json = request.json
         by_username = json.get('username')
-        return DataUsers().create_user(data=json).get_users_by_username(by_username)
+        return DataUsers().create_user(data=json).get_user_by_username(username=by_username)
     else:
         return 'Content-Type not supported!'
 
@@ -24,6 +24,10 @@ def users_get(id):
 if __name__ == '__main__':
     app.run(debug=True)
 
+
+@app.route('/user/delete/<int:id>', methods=['DELETE'])
+def users_delete(id):
+    return DataUsers().user_delete(id)
 
 # TODO
 # Create User

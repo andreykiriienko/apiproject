@@ -34,3 +34,23 @@ class DataUsers:
         user_data = {'id': user.id, 'username': user.username, 'name': user.name, 'last_name': user.last_name,
                      'email': user.email, 'role': user.role, 'date_creation': user.date_creation}
         return user_data
+
+    def get_user_by_username(self, username):
+        user = self.session.query(Users).filter(Users.username == username).first()
+        user_data = {'id': user.id, 'username': user.username, 'name': user.name, 'last_name': user.last_name,
+                     'email': user.email, 'role': user.role, 'date_creation': user.date_creation}
+        return user_data
+
+    def user_delete(self, id):
+        try:
+            user = self.session.query(Users).filter(Users.id == id).first()
+
+            self.session.delete(user)
+            self.session.commit()
+            self.session.close()
+            return True
+        except Exception as error:
+            self.session.close()
+            return {'error': error}
+
+
