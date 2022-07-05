@@ -3,11 +3,6 @@ from dao.DAO import Users
 from config import engine
 
 
-#     TODO:
-##      1. Полумение Юзера по username
-##      2. Удаоение Юзера
-
-
 class DataUsers:
 
     def __init__(self):
@@ -27,7 +22,7 @@ class DataUsers:
         self.session.add(user)
         self.session.commit()
         self.session.close()
-        return ?
+        return self
 
     def get_user_by_id(self, user_id):
         user = self.session.query(Users).filter(Users.id == user_id).first()
@@ -52,6 +47,3 @@ class DataUsers:
             return {'error': [error]}
         finally:
             self.session.close()
-
-
-

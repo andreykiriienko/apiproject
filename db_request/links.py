@@ -29,3 +29,15 @@ class DataLinks:
     def get_links_by_user_id(self, user_id):
         links = self.session.query(Links).filter(Links.user_id == user_id).all()
         return links
+
+    def link_delete(self, link_id):
+        try:
+            id_link = self.session.query(Links).filter(Links.id == link_id).first()
+
+            self.session.delete(id_link)
+            self.session.commit()
+            return {'success': f'link with id: {id_link} - was deleted'}
+        except Exception as error:
+            return {'error': [error]}
+        finally:
+            self.session.close()
