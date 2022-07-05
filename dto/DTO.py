@@ -12,7 +12,6 @@ class Links:
     id: int = None
     user_id: int = None
     link: str = None
-    # link_type: dict = Types()
 
 
 @dataclass

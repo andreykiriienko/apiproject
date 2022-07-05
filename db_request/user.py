@@ -47,3 +47,6 @@ class DataUsers:
             return {'error': [error]}
         finally:
             self.session.close()
+
+    def get_all_users(self):
+        pass

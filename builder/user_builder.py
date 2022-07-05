@@ -11,15 +11,15 @@ class UserBuilder:
         self.dto_links = Links()
         self.dto_types = Types()
 
-    def get_user(self, user_id):
-        user = self.db.get_user_by_id(user_id)
-        self.dto_user.id = user_id
+    def get_user(self, id):
+        user = self.db.get_user_by_id(user_id=id)
+        self.dto_user.id = id
         self.dto_user.username = user['username']
         self.dto_user.name = user['name']
         self.dto_user.email = user['email']
         self.dto_user.role = user['role']
         self.dto_user.date_creation = str(user['date_creation'])
-        self.dto_user.links = self.fill_links_fields(user_id=user_id)
+        self.dto_user.links = self.fill_links_fields(user_id=id)
         return self
 
     def fill_links_fields(self, user_id):

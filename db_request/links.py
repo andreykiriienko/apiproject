@@ -14,17 +14,23 @@ class DataLinks:
         self.sessionmaker = sessionmaker(bind=engine)
         self.session = self.sessionmaker()
 
-    def create_link(self, data):
-        user_id = data.get('user_id')
-        link_type_id = data.get('link_type_id')
-        link = data.get('link')
+    def create_link(self, data: dict, user_id: int):
+        try:
+            user_id = user_id
+            link_type_id = data.get('link_type_id')
+            link = data.get('link')
 
-        links = Links(user_id=user_id, link_type_id=link_type_id, link=link)
+            links = Links(user_id=user_id, link_type_id=link_type_id, link=link)
 
-        self.session.add(links)
-        self.session.commit()
-        self.session.close()
-        return self
+            self.session.add(links)
+            self.session.commit()
+            self.session.close()
+            return {'success': f'link with user id: {user_id} - was deleted'}
+        except Exception as error:
+            return {'error': [error]}
+        finally:
+            self.session.close()
+
 
     def get_links_by_user_id(self, user_id):
         links = self.session.query(Links).filter(Links.user_id == user_id).all()
