@@ -14,9 +14,9 @@ class DataLinks:
         self.sessionmaker = sessionmaker(bind=engine)
         self.session = self.sessionmaker()
 
-    def create_link(self, data: dict, user_id: int):
+    def create_link(self, data: dict):
         try:
-            user_id = user_id
+            user_id = data.get('user_id')
             link_type_id = data.get('link_type_id')
             link = data.get('link')
 
@@ -35,11 +35,18 @@ class DataLinks:
         links = self.session.query(Links).filter(Links.user_id == user_id).all()
         return links
 
-    def link_update(self, link_id, link: str):
+    def get_links_by_id(self, link_id):
+        link = self.session.query(Links).filter(Links.id == link_id).first()
+        return {'id': link.id, 'user_id': link.user_id, 'link_type_id': link.link_type_id, 'link': link.link}
+
+    def link_update(self, data: dict):
+        id = data.get('id')
+        link = data.get('link')
+        link_type_id = data.get('link_type_id')
         try:
-            self.session.query(Links).filter(Links.id == link_id).update({'link': link})
+            self.session.query(Links).filter(Links.id == id).update({'link': link, 'link_type_id': link_type_id})
             self.session.commit()
-            return {'success': f'link with id: {link_id} - was update'}
+            return {'success': f'link with id: {id} - was update'}
         except Exception as error:
             return {'error': [error]}
         finally:

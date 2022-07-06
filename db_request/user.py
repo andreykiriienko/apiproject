@@ -49,5 +49,11 @@ class DataUsers:
             self.session.close()
 
     def get_all_users(self):
-        for users in self.session.query(Users):
-            return users
+        users = self.session.query(Users).all()
+        users_dict = {}
+        for index, user in enumerate(users):
+            users_dict[user.id] = {'id': user.id, 'username': user.username, 'name': user.name, 'last_name': user.last_name,
+                     'email': user.email, 'role': user.role, 'date_creation': user.date_creation}
+
+        return users_dict
+
