@@ -3,11 +3,6 @@ from dao.DAO import Types
 from config import engine
 
 
-#     TODO:
-##      1. Полумение id типа по имени
-##      2. Обновление типа по id - (id, type: str)
-
-
 class DataTypes:
 
     def __init__(self):
@@ -52,5 +47,12 @@ class DataTypes:
     def get_all(self):
         pass
 
-    def update_type(self, user_id):
-        pass
+    def update_type(self, type_id, type: str):
+        try:
+            self.session.query(Types).filter(Types.id == type_id).update({'type': type})
+            self.session.commit()
+            return {'success': f'type with id: {type_id} - was update'}
+        except Exception as error:
+            return {'error': [error]}
+        finally:
+            self.session.close()

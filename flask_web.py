@@ -6,6 +6,7 @@ from flask import Flask, request, Response
 
 app = Flask(__name__)
 
+
 # ===================================================== USER =====================================================
 @app.route('/user/create', methods=['POST'])
 def create():
@@ -26,6 +27,20 @@ def users_get(user_id):
     return UserBuilder().get_user(id=user_id).to_json()
 
 
+@app.route('/user/delete/<int:user_id>', methods=['DELETE'])
+def users_delete(user_id):
+    request_user_delete = DataUsers().user_delete(user_id=user_id)
+    if 'error' in request_user_delete:
+        return Response(status=403)
+    else:
+        return Response(status=204)
+
+
+@app.route('/get/all/users', methods=['GET'])
+def get_all_user():
+    return DataUsers().get_all_users()
+
+
 # ===================================================== TYPE =====================================================
 @app.route('/type/create', methods=['POST'])
 def type_create():
@@ -41,6 +56,18 @@ def type_create():
         return 'Content-Type not supported!'
 
 
+@app.route('/type/update', methods=['PUT'])
+def type_update():
+    content_type = request.headers.get('Content-Type')
+    if content_type == 'application/json':
+        json = request.json
+        type_id = json.get('id')
+        type = json.get('type')
+        return DataTypes().update_type(type_id=type_id, type=type)
+    else:
+        return 'Content-Type not supported!'
+
+
 @app.route('/type/delete/<int:type_id>', methods=['DELETE'])
 def types_delete(type_id):
     request_type_delete = DataTypes().type_delete(type_id=type_id)
@@ -51,15 +78,6 @@ def types_delete(type_id):
 
 
 # ===================================================== LINK =====================================================
-@app.route('/link/delete/<int:type_id>', methods=['DELETE'])
-def links_delete(link_id):
-    request_link_delete = DataLinks().link_delete(link_id=link_id)
-    if 'error' in request_link_delete:
-        return Response(status=403)
-    else:
-        return Response(status=204)
-
-
 @app.route('/link/create/<int:user_id>', methods=['POST'])
 def create_link(user_id):
     content_type = request.headers.get('Content-Type')
@@ -72,6 +90,27 @@ def create_link(user_id):
             return DataUsers().get_user_by_id(user_id=user_id), 201
     else:
         return 'Content-Type not supported!'
+
+
+@app.route('/link/update', methods=['PUT'])
+def link_update():
+    content_type = request.headers.get('Content-Type')
+    if content_type == 'application/json':
+        json = request.json
+        link_id = json.get('id')
+        link = json.get('link')
+        return DataLinks().link_update(link_id=link_id, link=link)
+    else:
+        return 'Content-Type not supported!'
+
+
+@app.route('/link/delete/<int:link_id>', methods=['DELETE'])
+def links_delete(link_id):
+    request_link_delete = DataLinks().link_delete(link_id=link_id)
+    if 'error' in request_link_delete:
+        return Response(status=403)
+    else:
+        return Response(status=204)
 
 
 if __name__ == '__main__':

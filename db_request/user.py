@@ -49,4 +49,5 @@ class DataUsers:
             self.session.close()
 
     def get_all_users(self):
-        pass
+        for users in self.session.query(Users):
+            return users

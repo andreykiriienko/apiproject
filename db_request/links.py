@@ -31,10 +31,19 @@ class DataLinks:
         finally:
             self.session.close()
 
-
     def get_links_by_user_id(self, user_id):
         links = self.session.query(Links).filter(Links.user_id == user_id).all()
         return links
+
+    def link_update(self, link_id, link: str):
+        try:
+            self.session.query(Links).filter(Links.id == link_id).update({'link': link})
+            self.session.commit()
+            return {'success': f'link with id: {link_id} - was update'}
+        except Exception as error:
+            return {'error': [error]}
+        finally:
+            self.session.close()
 
     def link_delete(self, link_id):
         try:
