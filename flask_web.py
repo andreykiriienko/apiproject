@@ -18,7 +18,8 @@ def create():
         create_user = DataUsers().create_user(data=json),
         if 'error' in create_user:
             return Response(status=403)
-        return UserBuilder().get_user_by_username(username=user_by_username).to_json(), 201
+        else:
+            return UserBuilder().get_user_by_username(username=user_by_username).to_json(), 201
     else:
         return 'Content-Type not supported!'
 
@@ -101,7 +102,11 @@ def create_link():
 
 @app.route('/link/get/<int:link_id>', methods=['GET'])
 def link_get(link_id):
-    return DataLinks().get_links_by_id(link_id=link_id)
+    get_data_link = DataLinks().get_links_by_id(link_id=link_id)
+    if 'error' in get_data_link:
+        return Response(status=404)
+    else:
+        return get_data_link, 201
 
 
 # TODO - Обработать 404 на всех GET
@@ -128,7 +133,7 @@ def links_delete(link_id):
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run(debug=True)
 
 # TODO
 ## Create User
