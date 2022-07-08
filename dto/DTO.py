@@ -1,26 +1,27 @@
 from dataclasses import dataclass, field
+from typing import List
 
 
-@dataclass
+@dataclass()
 class Types:
-    id: int = None
-    types: str = None
+    id: int = field(default_factory=int)
+    types: str = field(default='')
 
 
-@dataclass
+@dataclass()
 class Links:
-    id: int = None
-    user_id: int = None
-    link: str = None
+    id: int = field(default_factory=int)
+    user_id: int = field(default_factory=int)
+    link: str = field(default='')
 
 
-@dataclass
+@dataclass()
 class User:
-    id: int = None
-    username: str = None
-    name: str = None
-    last_name: str = None
-    email: str = None
-    role: str = None
-    date_creation: str = None
-    links: list = Links()
+    id: int = field(default_factory=int)
+    username: str = field(default='')
+    name: str = field(default='')
+    last_name: str = field(default='')
+    email: str = field(default='')
+    role: str = field(default='')
+    date_creation: str = field(default='')
+    links: List[Links] = field(default_factory=list)

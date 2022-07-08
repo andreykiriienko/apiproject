@@ -1,5 +1,5 @@
 from db_request.db_fabric import DumbDB
-from dto.DTO import User, Links, Types
+import dto.DTO as dto
 from dataclasses import asdict
 import json
 
@@ -7,9 +7,9 @@ import json
 class UserBuilder:
     def __init__(self):
         self.db = DumbDB()
-        self.dto_user = User()
-        self.dto_links = Links()
-        self.dto_types = Types()
+        self.dto_user = dto.User()
+        self.dto_links = dto.Links()
+        self.dto_types = dto.Types()
 
     def get_user(self, id):
         user = self.db.get_user_by_id(user_id=id)
@@ -24,13 +24,13 @@ class UserBuilder:
 
     def get_user_by_username(self, username):
         user = self.db.get_user_by_username(username=username)
-        self.dto_user.id = id
-        self.dto_user.username = user['username']
+        self.dto_user.id = user['id']
+        self.dto_user.username = username
         self.dto_user.name = user['name']
         self.dto_user.email = user['email']
         self.dto_user.role = user['role']
         self.dto_user.date_creation = str(user['date_creation'])
-        self.dto_user.links = self.fill_links_fields(user_id=id)
+        self.dto_user.links = self.fill_links_fields(user_id=user['id'])
         return self
 
     def fill_links_fields(self, user_id):
@@ -50,4 +50,5 @@ class UserBuilder:
         return {'id': link_type['id'], 'type': link_type['type']}
 
     def to_json(self):
-        return asdict(self.dto_user)
+        dto_user = json.dumps(asdict(self.dto_user))
+        return json.loads(dto_user)
