@@ -1,6 +1,6 @@
 from db_request.db_fabric import DumbDB
 from dto.DTO import User, Links, Types
-import dataclasses
+from dataclasses import asdict
 import json
 
 
@@ -50,5 +50,4 @@ class UserBuilder:
         return {'id': link_type['id'], 'type': link_type['type']}
 
     def to_json(self):
-        user_dto = json.dumps(dataclasses.asdict(self.dto_user))
-        return json.loads(user_dto)
+        return asdict(self.dto_user)

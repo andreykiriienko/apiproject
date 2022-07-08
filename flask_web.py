@@ -3,7 +3,6 @@ from db_request.user import DataUsers
 from db_request.type import DataTypes
 from db_request.links import DataLinks
 from flask import Flask, request, Response
-import json as j
 
 app = Flask(__name__)
 
