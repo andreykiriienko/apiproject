@@ -2,7 +2,9 @@ from builder.user_builder import UserBuilder
 from db_request.user import DataUsers
 from db_request.type import DataTypes
 from db_request.links import DataLinks
-from flask import Flask, request, Response
+from flask import Flask, request
+
+from misc import error_processing
 
 app = Flask(__name__)
 
@@ -14,32 +16,29 @@ def create():
     if content_type == 'application/json':
         json = request.json
         user_by_username = json.get('username')
-        create_user = DataUsers().create_user(data=json),
-        if 'error' in create_user:
-            return Response(status=403)
-        else:
-            return UserBuilder().get_user_by_username(username=user_by_username).to_json(), 201
+        create_user = DataUsers().create_user(data=json)
+        get_user = UserBuilder().get_user_by_username(username=user_by_username).to_json()
+        return error_processing(create_user, 201, 403, get_user)
     else:
         return 'Content-Type not supported!'
 
 
 @app.route('/user/<int:user_id>', methods=['GET'])
 def users_get(user_id):
-    return UserBuilder().get_user(id=user_id).to_json()
+    user_data = UserBuilder().get_user(id=user_id).to_json()
+    return error_processing(user_data, 200, 404)
 
 
 @app.route('/user/delete/<int:user_id>', methods=['DELETE'])
 def users_delete(user_id):
     request_user_delete = DataUsers().user_delete(user_id=user_id)
-    if 'error' in request_user_delete:
-        return Response(status=403)
-    else:
-        return Response(status=204)
+    return error_processing(request_user_delete, 204, 403)
 
 
 @app.route('/user/get', methods=['GET'])
 def get_all():
-    return DataUsers().get_all_users()
+    all_users = DataUsers().get_all_users()
+    return error_processing(all_users, 200, 404)
 
 
 # ===================================================== TYPE =====================================================
@@ -49,10 +48,8 @@ def type_create():
     if content_type == 'application/json':
         json = request.json
         create_type = DataTypes().create_type(data=json)
-        if 'error' in create_type:
-            return create_type, 403
-        else:
-            return DataTypes().get_type_by_type_name(data=json), 201
+        get_type = DataTypes().get_type_by_type_name(data=json)
+        return error_processing(create_type, 201, 403, get_type)
     else:
         return 'Content-Type not supported!'
 
@@ -62,7 +59,8 @@ def type_update():
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
         json = request.json
-        return DataTypes().update_type(data=json)
+        update_type = DataTypes().update_type(data=json)
+        return error_processing(update_type, 201, 403)
     else:
         return 'Content-Type not supported!'
 
@@ -70,18 +68,13 @@ def type_update():
 @app.route('/type/delete/<int:type_id>', methods=['DELETE'])
 def type_delete(type_id):
     request_type_delete = DataTypes().type_delete(type_id=type_id)
-    if 'error' in request_type_delete:
-        return Response(status=403)
-    else:
-        return Response(status=204)
+    return error_processing(request_type_delete, 204, 403)
 
 
 @app.route('/type/get/<int:type_id>', methods=['GET'])
 def type_get(type_id):
-    return DataTypes().get_type_by_id(type_id=type_id)
-
-
-# TODO - Обработать 404 на всех GET
+    get_type = DataTypes().get_type_by_id(type_id=type_id)
+    return error_processing(get_type, 200, 404)
 
 
 # ===================================================== LINK =====================================================
@@ -90,11 +83,9 @@ def create_link():
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
         json = request.json
-        link_created = DataLinks().create_link(data=json)
-        if 'error' in link_created:
-            return Response(status=403)
-        else:
-            return UserBuilder().get_user(id=json.get('user_id')).to_json(), 201
+        link = DataLinks().create_link(data=json)
+        get_link = UserBuilder().get_user(id=json.get('user_id')).to_json()
+        return error_processing(link, 201, 403, get_link)
     else:
         return 'Content-Type not supported!'
 
@@ -102,13 +93,7 @@ def create_link():
 @app.route('/link/get/<int:link_id>', methods=['GET'])
 def link_get(link_id):
     get_data_link = DataLinks().get_links_by_id(link_id=link_id)
-    if 'error' in get_data_link:
-        return Response(status=404)
-    else:
-        return get_data_link, 201
-
-
-# TODO - Обработать 404 на всех GET
+    return error_processing(get_data_link, 200, 404)
 
 
 @app.route('/link/update', methods=['PUT'])
@@ -116,7 +101,8 @@ def link_update():
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
         json = request.json
-        return DataLinks().link_update(data=json)
+        link = DataLinks().link_update(data=json)
+        return error_processing(link, 201, 403)
     else:
         return 'Content-Type not supported!'
 
@@ -124,20 +110,9 @@ def link_update():
 @app.route('/link/delete/<int:link_id>', methods=['DELETE'])
 def links_delete(link_id):
     request_link_delete = DataLinks().link_delete(link_id=link_id)
-    if 'error' in request_link_delete:
-        return Response(status=403)
-    else:
-        return Response(status=204)
+    return error_processing(request_link_delete, 204, 403)
 
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.run(debug=True)
-
-# TODO
-## Create User
-## /user
-##  {"username": "boy", "name": "Vlad"}
-##
-## Get User
-## /user/<id>

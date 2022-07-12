@@ -13,25 +13,31 @@ class UserBuilder:
 
     def get_user(self, id):
         user = self.db.get_user_by_id(user_id=id)
-        self.dto_user.id = id
-        self.dto_user.username = user['username']
-        self.dto_user.name = user['name']
-        self.dto_user.email = user['email']
-        self.dto_user.role = user['role']
-        self.dto_user.date_creation = str(user['date_creation'])
-        self.dto_user.links = self.fill_links_fields(user_id=id)
-        return self
+        if 'error' not in user:
+            self.dto_user.id = id
+            self.dto_user.username = user['username']
+            self.dto_user.name = user['name']
+            self.dto_user.email = user['email']
+            self.dto_user.role = user['role']
+            self.dto_user.date_creation = str(user['date_creation'])
+            self.dto_user.links = self.fill_links_fields(user_id=id)
+            return self
+        else:
+            return self
 
     def get_user_by_username(self, username):
         user = self.db.get_user_by_username(username=username)
-        self.dto_user.id = user['id']
-        self.dto_user.username = username
-        self.dto_user.name = user['name']
-        self.dto_user.email = user['email']
-        self.dto_user.role = user['role']
-        self.dto_user.date_creation = str(user['date_creation'])
-        self.dto_user.links = self.fill_links_fields(user_id=user['id'])
-        return self
+        if 'error' not in user:
+            self.dto_user.id = user['id']
+            self.dto_user.username = username
+            self.dto_user.name = user['name']
+            self.dto_user.email = user['email']
+            self.dto_user.role = user['role']
+            self.dto_user.date_creation = str(user['date_creation'])
+            self.dto_user.links = self.fill_links_fields(user_id=user['id'])
+            return self
+        else:
+            return self
 
     def fill_links_fields(self, user_id):
         links = self.db.get_links_by_user_id(user_id=user_id)
@@ -50,5 +56,8 @@ class UserBuilder:
         return {'id': link_type['id'], 'type': link_type['type']}
 
     def to_json(self):
-        dto_user = json.dumps(asdict(self.dto_user))
-        return json.loads(dto_user)
+        if self.dto_user.id == 0:
+            return json.dumps({'error': ['something went wrong while getting the user']})
+        else:
+            dto_user = json.dumps(asdict(self.dto_user))
+            return json.loads(dto_user)

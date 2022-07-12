@@ -32,12 +32,22 @@ class DataLinks:
             self.session.close()
 
     def get_links_by_user_id(self, user_id):
-        links = self.session.query(Links).filter(Links.user_id == user_id).all()
-        return links
+        try:
+            links = self.session.query(Links).filter(Links.user_id == user_id).all()
+            return links
+        except Exception as error:
+            return {'error': [error]}
+        finally:
+            self.session.close()
 
     def get_links_by_id(self, link_id):
-        link = self.session.query(Links).filter(Links.id == link_id).first()
-        return {'id': link.id, 'user_id': link.user_id, 'link_type_id': link.link_type_id, 'link': link.link}
+        try:
+            link = self.session.query(Links).filter(Links.id == link_id).first()
+            return {'id': link.id, 'user_id': link.user_id, 'link_type_id': link.link_type_id, 'link': link.link}
+        except Exception as error:
+            return {'error': [error]}
+        finally:
+            self.session.close()
 
     def link_update(self, data: dict):
         id = data.get('id')

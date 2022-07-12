@@ -10,31 +10,43 @@ class DataUsers:
         self.session = self.sessionmaker()
 
     def create_user(self, data):
-        email = data.get('email')
-        username = data.get('username')
-        last_name = data.get('last_name')
-        name = data.get('name')
-        password = data.get('password')
+        try:
+            email = data.get('email')
+            username = data.get('username')
+            last_name = data.get('last_name')
+            name = data.get('name')
+            password = data.get('password')
 
-        user = Users(email=email, username=username, last_name=last_name,
+            user = Users(email=email, username=username, last_name=last_name,
                      name=name, password=password)
 
-        self.session.add(user)
-        self.session.commit()
-        self.session.close()
-        return self
+            self.session.add(user)
+            self.session.commit()
+            return self
+        except Exception as error:
+            return {'error': [error]}
+        finally:
+            self.session.close()
 
     def get_user_by_id(self, user_id):
-        user = self.session.query(Users).filter(Users.id == user_id).first()
-        user_data = {'id': user.id, 'username': user.username, 'name': user.name, 'last_name': user.last_name,
-                     'email': user.email, 'role': user.role, 'date_creation': user.date_creation}
-        return user_data
+        try:
+            user = self.session.query(Users).filter(Users.id == user_id).first()
+            return {'id': user.id, 'username': user.username, 'name': user.name, 'last_name': user.last_name,
+                    'email': user.email, 'role': user.role, 'date_creation': user.date_creation}
+        except Exception as error:
+            return {'error': [error]}
+        finally:
+            self.session.close()
 
     def get_user_by_username(self, username):
-        user = self.session.query(Users).filter(Users.username == username).first()
-        user_data = {'id': user.id, 'username': user.username, 'name': user.name, 'last_name': user.last_name,
-                     'email': user.email, 'role': user.role, 'date_creation': user.date_creation}
-        return user_data
+        try:
+            user = self.session.query(Users).filter(Users.username == username).first()
+            return {'id': user.id, 'username': user.username, 'name': user.name, 'last_name': user.last_name,
+                    'email': user.email, 'role': user.role, 'date_creation': user.date_creation}
+        except Exception as error:
+            return {'error': [error]}
+        finally:
+            self.session.close()
 
     def user_delete(self, user_id):
         try:
@@ -49,11 +61,15 @@ class DataUsers:
             self.session.close()
 
     def get_all_users(self):
-        users = self.session.query(Users).all()
-        users_dict = {}
-        for index, user in enumerate(users):
-            users_dict[user.id] = {'id': user.id, 'username': user.username, 'name': user.name, 'last_name': user.last_name,
-                     'email': user.email, 'role': user.role, 'date_creation': user.date_creation}
-
-        return users_dict
-
+        try:
+            users = self.session.query(Users).all()
+            users_dict = {}
+            for index, user in enumerate(users):
+                users_dict[user.id] = {'id': user.id, 'username': user.username, 'name': user.name,
+                                       'last_name': user.last_name,
+                                       'email': user.email, 'role': user.role, 'date_creation': user.date_creation}
+            return users_dict
+        except Exception as error:
+            return {'error': [error]}
+        finally:
+            self.session.close()
