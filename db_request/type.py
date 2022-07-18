@@ -30,13 +30,23 @@ class DataTypes:
             self.session.close()
 
     def get_type_by_type_name(self, data: dict):
-        name = data.get('type')
-        link_type = self.session.query(Types).filter(Types.type == name).first()
-        return {'id': link_type.id, 'type': link_type.type}
+        try:
+            name = data.get('type')
+            link_type = self.session.query(Types).filter(Types.type == name).first()
+            return {'id': link_type.id, 'type': link_type.type}
+        except Exception as error:
+            return {'error': [error]}
+        finally:
+            self.session.close()
 
     def get_type_by_id(self, type_id):
-        link_type = self.session.query(Types).filter(Types.id == type_id).first()
-        return {'id': link_type.id, 'type': link_type.type}
+        try:
+            link_type = self.session.query(Types).filter(Types.id == type_id).first()
+            return {'id': link_type.id, 'type': link_type.type}
+        except Exception as error:
+            return {'error': [error]}
+        finally:
+            self.session.close()
 
     def type_delete(self, type_id):
         try:
@@ -51,7 +61,16 @@ class DataTypes:
             self.session.close()
 
     def get_all(self):
-        pass
+        try:
+            users = self.session.query(Types).all()
+            types_dict = {}
+            for index, type in enumerate(users):
+                types_dict[type.id] = {'id': type.id, 'type': type.type}
+            return types_dict
+        except Exception as error:
+            return {'error': [error]}
+        finally:
+            self.session.close()
 
     def update_type(self, data: dict):
         type_id = data.get('id')

@@ -18,7 +18,7 @@ class DataUsers:
             password = data.get('password')
 
             user = Users(email=email, username=username, last_name=last_name,
-                     name=name, password=password)
+                         name=name, password=password)
 
             self.session.add(user)
             self.session.commit()
