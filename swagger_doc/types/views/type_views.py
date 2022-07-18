@@ -8,6 +8,7 @@ class Type(Schema):
 
 
 class TypeViewCreate(SwaggerView):
+    tags = ['Types']
     responses = {
         201: {
             "description": "Successfully created",
@@ -25,6 +26,7 @@ class TypeViewCreate(SwaggerView):
 
 
 class TypeViewGetAll(SwaggerView):
+    tags = ['Types']
     responses = {
         200: {
             "description": "A list of types",
@@ -42,12 +44,12 @@ class TypeViewGetAll(SwaggerView):
 
 
 class TypeViewGetById(SwaggerView):
+    tags = ['Types']
     parameters = [
         {
-            "name": "Types",
-            "in": "query",
-            "type": "integer",
-            "string": "str",
+            "name": "type_id",
+            "in": "path",
+            "type": "string",
             "required": True,
             "default": ""
         }
@@ -69,10 +71,11 @@ class TypeViewGetById(SwaggerView):
 
 
 class TypeViewDelete(SwaggerView):
+    tags = ['Types']
     parameters = [
         {
-            "name": "Types",
-            "in": "query",
+            "name": "type_id",
+            "in": "path",
             "type": "integer",
             "required": True,
             "default": ""
@@ -80,25 +83,24 @@ class TypeViewDelete(SwaggerView):
     ]
     responses = {
         204: {
-            "description": "Successfully created",
-            "schema": Type
+            "description": "Successfully deleted",
         },
-        403: {
-            "description": "Access is denied"
+        404: {
+            "description": "Not Found"
         }
     }
 
     @staticmethod
     def delete(type_id):
-        delete = type_delete(type_id=type_id)
-        return delete
+        return type_delete(type_id=type_id)
 
 
 class TypeViewUpdate(SwaggerView):
+    tags = ['Types']
     parameters = [
         {
             "name": "Types",
-            "in": "query",
+            "in": "path",
             "type": "integer",
             "string": "str",
             "required": True,

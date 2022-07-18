@@ -70,7 +70,7 @@ def type_update():
 # @app.route('/type/delete/<int:type_id>', methods=['DELETE'])
 def type_delete(type_id):
     request_type_delete = DataTypes().type_delete(type_id=type_id)
-    return error_processing(request_type_delete, 204, 403)
+    return error_processing(request_type_delete, 204, 404)
 
 
 # @app.route('/type/get/<int:type_id>', methods=['GET'])
