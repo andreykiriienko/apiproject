@@ -1,4 +1,4 @@
-from swagger_doc.users.views.user_views import UserViewGetAll, UserViewGetById, UserViewCreate, UserViewDelete
+from swagger_doc.users.user_views import UserViewGetAll, UserViewGetById, UserViewCreate, UserViewDelete
 
 from __main__ import app
 

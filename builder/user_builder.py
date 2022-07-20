@@ -17,6 +17,7 @@ class UserBuilder:
             self.dto_user.id = id
             self.dto_user.username = user['username']
             self.dto_user.name = user['name']
+            self.dto_user.last_name = user['last_name']
             self.dto_user.email = user['email']
             self.dto_user.role = user['role']
             self.dto_user.date_creation = str(user['date_creation'])
@@ -31,6 +32,7 @@ class UserBuilder:
             self.dto_user.id = user['id']
             self.dto_user.username = username
             self.dto_user.name = user['name']
+            self.dto_user.last_name = user['last_name']
             self.dto_user.email = user['email']
             self.dto_user.role = user['role']
             self.dto_user.date_creation = str(user['date_creation'])
@@ -57,7 +59,7 @@ class UserBuilder:
 
     def to_json(self):
         if self.dto_user.id == 0:
-            return json.dumps({'error': ['something went wrong while getting the user']})
+            return json.dumps({'error': ['something went wrong while processing the user']})
         else:
             dto_user = json.dumps(asdict(self.dto_user))
             return json.loads(dto_user)

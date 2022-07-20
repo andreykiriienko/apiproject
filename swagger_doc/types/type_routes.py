@@ -1,4 +1,4 @@
-from swagger_doc.types.views.type_views import TypeViewCreate, TypeViewGetAll, TypeViewGetById, TypeViewDelete, \
+from swagger_doc.types.type_views import TypeViewCreate, TypeViewGetAll, TypeViewGetById, TypeViewDelete, \
     TypeViewUpdate
 
 from __main__ import app

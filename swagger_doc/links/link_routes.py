@@ -1,4 +1,4 @@
-from swagger_doc.links.views.link_views import LinkViewCreate, LinkViewGet, LinkViewUpdate, LinkViewDelete
+from swagger_doc.links.link_views import LinkViewCreate, LinkViewGet, LinkViewUpdate, LinkViewDelete
 
 from __main__ import app
 
