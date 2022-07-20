@@ -1,7 +1,7 @@
 from swagger_doc.types.views.type_views import TypeViewCreate, TypeViewGetAll, TypeViewGetById, TypeViewDelete, \
     TypeViewUpdate
 
-from run_app import app
+from __main__ import app
 
 app.add_url_rule(
     '/type/get',

@@ -7,8 +7,21 @@ class Type(Schema):
     type = fields.Str()
 
 
+class TypePost(Schema):
+    type = fields.Str()
+
+
 class TypeViewCreate(SwaggerView):
     tags = ['Types']
+    parameters = [
+        {
+            "name": "body",
+            "in": "body",
+            "type": "string",
+            "required": True,
+            "schema": TypePost,
+        }
+    ]
     responses = {
         201: {
             "description": "Successfully created",
@@ -99,12 +112,11 @@ class TypeViewUpdate(SwaggerView):
     tags = ['Types']
     parameters = [
         {
-            "name": "Types",
-            "in": "path",
-            "type": "integer",
-            "string": "str",
+            "name": "body",
+            "in": "body",
+            "type": "string",
             "required": True,
-            "default": ""
+            "schema": Type
         }
     ]
     responses = {
@@ -121,12 +133,3 @@ class TypeViewUpdate(SwaggerView):
     def put():
         update = type_update()
         return update
-
-
-
-
-
-
-
-
-

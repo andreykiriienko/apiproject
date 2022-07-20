@@ -122,6 +122,8 @@ def links_delete(link_id):
 
 
 import swagger_doc.types.routes.type_routes
+import swagger_doc.links.routes.link_routes
+import swagger_doc.users.routes.user_routes
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
